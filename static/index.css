@@ -1,0 +1,99 @@
+:root {
+    --brand-red: #ff0505;
+    --white: #ffffff;
+    --radius: 8px;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 2rem;
+    background-color: rgb(1, 59, 37);
+    font-family: sans-serif;
+}
+
+.header {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 4rem 1rem 1rem;
+    text-align: center;
+}
+
+h1 {
+    margin: 0;
+    padding-top: 1.25rem;
+    font-size: clamp(2.5rem, 8vw, 6rem);
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+    animation: swingHead 3s ease-in-out infinite;
+}
+
+.email-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 400px;
+    gap: 1.25rem;
+    margin-top: 2rem;
+}
+
+.email-form label {
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+.email-form input[type="email"] {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    font-size: 1rem;
+    border: 2px solid var(--white);
+    border-radius: var(--radius);
+    outline: none;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.email-form input[type="email"]:focus {
+    transform: scale(1.02);
+    border-color: #000;
+}
+
+.email-form input[type="submit"] {
+    width: 100%;
+    padding: 0.8rem;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: var(--brand-red);
+    background-color: var(--white);
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.email-form input[type="submit"]:hover {
+    background-color: #f0f0f0;
+}
+
+.email-form input[type="submit"]:active {
+    transform: scale(0.98);
+}
+
+@keyframes swingHead {
+    0%, 100% {
+        transform: translateX(-20rem) translateY(-10rem) rotate(-10deg);
+    }
+    50% {
+        transform: translateX(-20rem) translateY(-10rem) rotate(10deg);
+    }
+}

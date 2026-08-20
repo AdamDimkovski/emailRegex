@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IsYourEmailAddressValid.Com</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+</head>
+
+<body>
+
+    <!-- Header Chunk-->
+    <header class="header">
+        <h1>IsYourEmailAddressValid.COM</h1>
+    </header>
+
+    <!-- Main form container -->
+    <form action="/regex.py" method="POST" class="email-form">
+        <label for="email">Input Your Email Address 😡: </label>
+        
+        <!-- Changed type to email for built-in browser validation -->
+        <input type="email" id="email" name="email" required placeholder="name@example.com">
+        
+        <input type="submit" value="Submit">
+    </form>
+
+</body>
+
+</html>
