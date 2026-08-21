@@ -15,13 +15,16 @@ def regex():
         if email:
            email_pattern = r"^[a-zA-Z0-9]+([._%+-][a-zA-Z0-9]+)*[@][a-zA-Z0-9]+([-][a-zA-Z0-9]+)*([.][a-zA-Z]{2,})+$"
            if re.fullmatch(email_pattern, email):
-                   message = f"You submitted: {email}"
+                   message = f"Valid Email Alert! {email}"
+                   result_gif = "success.gif"
            else:
                message = "wrong format bud"
-        else:
+               result_gif = "failed.png" 
+        else: 
             message = "Internal Error Whoopidy Doo Dah"
+            result_gif = "error.gif"
         
-    return render_template("index.html", message=message)
+    return render_template("index.html", message=message, result_gif=result_gif)
 
 if __name__ == "__main__":
     app.run(debug=True)

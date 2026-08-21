@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IsYourEmailAddressValid.Com</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
 </head>
 
 <body>
@@ -14,19 +15,63 @@
         <h1>IsYourEmailAddressValid.COM</h1>
     </header>
 
-    <!-- Main form container -->
-    <form action="/regex.py" method="POST" class="email-form">
-        <label for="email">Input Your Email Address 😡: </label>
-        
-        <!-- Changed type to email for built-in browser validation -->
-        <input type="email" id="email" name="email" required placeholder="name@example.com">
-        
-        <input type="submit" value="Submit">
-    </form>
+    <div class="page-wrapper">
 
-    {% if message %}
-        <p>{{ message }}</p>
+    {% if result_gif == "success.gif" %}
+        <img class="side-gif" src="{{ url_for('static', filename=result_gif) }}" alt="Result animation">
     {% endif %}
+
+    <!-- Main form container -->
+     <div class="main-content">
+        <form action="/regex.py" method="POST" class="email-form">
+            <label for="email">Input Your Email Address 😡: </label>
+            
+            <!-- Changed type to email for built-in browser validation -->
+            <input type="email" id="email" name="email" required placeholder="name@example.com">
+            
+            <input type="submit" value="Submit">
+        </form>
+
+        {% if message %}
+            <p>{{ message }}</p>
+        {% endif %}
+
+        </div>
+
+        {% if result_gif == "success.gif" %}
+            <img class="side-gif" src="{{ url_for('static', filename=result_gif) }}" alt="Result animation">
+        {% endif %}
+
+    <!-- Specifically if the success case occurs-->
+    {% if result_gif == "success.gif" %}
+        <script>
+            window.onload = function() {
+                confetti({
+                    particleCount: 150,
+                    spread: 70,
+                    origin: { y: 0.6 }
+                });
+                const sound = new Audio("{{ url_for('static', filename='yipeee.mp3') }}");
+                sound.play();
+            };
+        </script>
+    {% endif %}
+
+    <!-- Specifically if the failure case occurs-->
+    {% if result_gif == "failed.png" %}
+        <div class="wasted-overlay" id="wastedOverlay">
+            <img src="{{ url_for('static', filename=result_gif) }}" alt="Result animation">
+        </div>
+
+        <script>
+            setTimeout(function() {
+                document.getElementById("wastedOverlay").remove();
+            }, 4000);
+        </script>
+
+    {% endif %}
+
+    </div>
 
 </body>
 
