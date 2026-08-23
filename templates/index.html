@@ -18,7 +18,7 @@
     <div class="page-wrapper">
 
     {% if result_gif == "success.gif" %}
-        <img class="side-gif" src="{{ url_for('static', filename=result_gif) }}" alt="Result animation">
+        <img class="side-gif-success" src="{{ url_for('static', filename=result_gif) }}" alt="Result animation">
     {% endif %}
 
     <!-- Main form container -->
@@ -39,7 +39,7 @@
         </div>
 
         {% if result_gif == "success.gif" %}
-            <img class="side-gif" src="{{ url_for('static', filename=result_gif) }}" alt="Result animation">
+            <img class="side-gif-success" src="{{ url_for('static', filename=result_gif) }}" alt="Result animation">
         {% endif %}
 
     <!-- Specifically if the success case occurs-->
@@ -72,6 +72,50 @@
     {% endif %}
 
     </div>
+
+   {% if result_gif == "hacker.gif" %}
+    <div id="flashOverlay"></div>
+
+    <div class="progress-container">
+        <div class="fake-progress-bar"></div>
+    </div>
+    <p id="threatText" style="color:#ff3333; font-family: monospace;">INITIALIZING TRACE...</p>
+
+    <script>
+        const messages = [
+            "INITIALIZING TRACE...",
+            "LOCATING SOURCE IP...",
+            "BREACHING FIREWALL...",
+            "IDENTITY CONFIRMED.",
+            "NOTIFYING AUTHORITIES..."
+        ];
+        let i = 0;
+        const el = document.getElementById("threatText");
+        const interval = setInterval(() => {
+            i++;
+            if (i < messages.length) el.textContent = messages[i];
+            else clearInterval(interval);
+        }, 800);
+    </script>
+
+    <div id="fullscreenGif" style="display:none;">
+        <img data-src="{{ url_for('static', filename='explosion.gif') }}" alt="hacker detected">
+    </div>
+
+    <script>
+        setTimeout(function() {
+            const fullscreenGif = document.getElementById("fullscreenGif");
+            fullscreenGif.style.display = "flex";
+            fullscreenGif.querySelector("img").src = fullscreenGif.querySelector("img").dataset.src;
+
+            setTimeout(function() {
+                fullscreenGif.remove();
+                }, 6500);
+
+        }, 4000);
+    </script>
+    {% endif %}
+
 
 </body>
 
