@@ -48,9 +48,9 @@ def regex():
                             f"127.0.1.{code}" for code in range(2, 12)
                         }
 
-                        if any(str(address) in blocklist_codes for address in blocklist_response):
+                        if any(address.to_text().rstrip(".") in blocklist_codes for address in blocklist_response):
                             # This runs if the email is malicious
-                            message = None
+                            message = "Warning: this email domain is on the phishing blocklist."
                             result_gif = "hacker.gif"
                         else:
                             # A DNS answer outside Spamhaus's DBL codes is not a listing.

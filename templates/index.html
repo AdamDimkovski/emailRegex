@@ -93,6 +93,8 @@
    <!-- Red flashes to incite fear -->
     <div id="flashOverlay"></div>
 
+    <button id="enableSound" type="button">Enable sound</button>
+
     <!-- Fake progress bar for aura-->
     <div class="progress-container">
         <div class="fake-progress-bar"></div>
@@ -116,33 +118,38 @@
         const beep = new Audio("{{ url_for('static', filename='beep.mp3') }}");
         const boom = new Audio("{{ url_for('static', filename='boom.mp3') }}");
 
-        // Little mini function which plays certain audio which is called 
+        // Little mini function which plays certain audio which is called
         function playCue(audio) {
             audio.currentTime = 0;
-            audio.play().catch(() => {
-                
-            });
+            return audio.play();
         }
 
-        // Function call to play beep until the progress bar finishes
-        playCue(beep);
-        const interval = setInterval(() => {
-            i++;
-            if (i < messages.length) {
-                el.textContent = messages[i];
-                playCue(beep);
-            } else {
-                clearInterval(interval);
-            }
-        }, 800);
+        function startThreatSequence() {
+            const interval = setInterval(() => {
+                i++;
+                if (i < messages.length) {
+                    el.textContent = messages[i];
+                    playCue(beep).catch(() => {});
+                } else {
+                    clearInterval(interval);
+                }
+            }, 800);
 
-        // Reset timeout which plays boom when progress bar loading finishes
-        setTimeout(() => {
-            clearInterval(interval);
-            beep.pause();
-            beep.currentTime = 0;
-            playCue(boom);
-        }, 4000);
+            playCue(beep).catch(() => {});
+            setTimeout(() => {
+                clearInterval(interval);
+                beep.pause();
+                beep.currentTime = 0;
+                playCue(boom).catch(() => {});
+            }, 4000);
+        }
+
+        // Browsers may block automatic audio after a form submission.
+        startThreatSequence();
+        document.getElementById("enableSound").addEventListener("click", () => {
+            startThreatSequence();
+            document.getElementById("enableSound").remove();
+        });
     </script>
 
     <!-- Div call for the explosion gif after progress load-->
