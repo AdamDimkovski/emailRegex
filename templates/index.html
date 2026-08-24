@@ -60,14 +60,16 @@
 
             // The success case cats block:
             if (result_gif === "success.gif") {
-            area.innerHTML = `
-                <img class="side-gif-success" src="/static/success.gif" alt="Result animation">
-                <p>${message}</p>
-                <img class="side-gif-success" src="/static/success.gif" alt="Result animation">
-            `;
-            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
-            new Audio("/static/yipeee.mp3").play().catch(() => {});
-            } 
+                area.innerHTML = `
+                    <div class="success-row">
+                        <img class="side-gif-success" src="/static/success.gif" alt="Result animation">
+                        <p>${message}</p>
+                        <img class="side-gif-success" src="/static/success.gif" alt="Result animation">
+                    </div>
+                `;
+                confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+                new Audio("/static/yipeee.mp3").play().catch(() => {});
+            }
 
             // the failure case block:
             if (result_gif === "failed.png") {
@@ -83,7 +85,7 @@
                     <div class="progress-container"><div class="fake-progress-bar"></div></div>
                     <p id="threatText" style="color:#ff3333; font-family: monospace;">INITIALIZING TRACE...</p>
                     <div id="fullscreenGif" style="display:none;"><img id="explosionImg" alt="hacker detected"></div>
-                    <div id="eliminatedText" style="display:none;">HACKERS ELIMINATED</div>
+                    <div id="eliminatedText">HACKERS ELIMINATED</div>
                 `;
                 startThreatSequence();
 
@@ -98,7 +100,7 @@
                         eliminated.style.display = "block";
 
                         setTimeout(() => eliminated.remove(), 1000);
-                    }, 6500);
+                    }, 3500);
                 }, 4000);
             }
         }

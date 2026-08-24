@@ -123,6 +123,14 @@ h1 {
     animation: catSwing 3s ease-in-out infinite;
 }
 
+.success-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
 p {
     font-size: 1.5rem;
     font-weight: 700;
@@ -231,7 +239,6 @@ p {
   z-index: 10001;
   animation: popIn 0.4s ease-out;
 }
-
 /* Keyframes */
 
 /* fadeIn: Used for #fullscreenGif */
