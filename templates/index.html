@@ -39,6 +39,7 @@
         </div>
 
     <script>
+        // Call for email form answer case
         document.getElementById("emailForm").addEventListener("submit", async function(e) {
             e.preventDefault();
 
@@ -53,21 +54,29 @@
             showResult(data.message, data.result_gif);
         });
 
+        // function which hanldes case outputs
         function showResult(message, result_gif) {
             const area = document.getElementById("resultArea");
-            area.innerHTML = `<p>${message}</p>`;
 
+            // The success case cats block:
             if (result_gif === "success.gif") {
-                confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
-                new Audio("/static/yipeee.mp3").play().catch(() => {});
-            }
+            area.innerHTML = `
+                <img class="side-gif-success" src="/static/success.gif" alt="Result animation">
+                <p>${message}</p>
+                <img class="side-gif-success" src="/static/success.gif" alt="Result animation">
+            `;
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+            new Audio("/static/yipeee.mp3").play().catch(() => {});
+            } 
 
+            // the failure case block:
             if (result_gif === "failed.png") {
                 area.innerHTML += `<div class="wasted-overlay" id="wastedOverlay"><img src="/static/${result_gif}" alt="Result animation"></div>`;
                 setTimeout(() => document.getElementById("wastedOverlay")?.remove(), 4000);
                 new Audio("/static/failed.mp3").play().catch(() => {});
             }
 
+            // the hacker case block
             if (result_gif === "hacker.gif") {
                 area.innerHTML += `
                     <div id="flashOverlay"></div>
@@ -86,11 +95,12 @@
             }
         }
 
+        // List of messages during hacker sequence
         const messages = [
             "INITIALIZING TRACE...", "LOCATING SOURCE IP...", "BREACHING FIREWALL...",
             "IDENTITY CONFIRMED.", "NOTIFYING AUTHORITIES..."
         ];
-
+        
         function playCue(audio) {
             audio.currentTime = 0;
             return audio.play();
