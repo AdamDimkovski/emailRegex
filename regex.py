@@ -43,11 +43,19 @@ def regex():
                    query_target = f"{domain_to_check}.{dbl_zone}"
                    
                    try:
-                        dns.resolver.resolve(query_target, "A")
-                        
-                        # This runs if the email is malicious 
-                        message = None
-                        result_gif = "hacker.gif"
+                        blocklist_response = dns.resolver.resolve(query_target, "A")
+                        blocklist_codes = {
+                            f"127.0.1.{code}" for code in range(2, 12)
+                        }
+
+                        if any(str(address) in blocklist_codes for address in blocklist_response):
+                            # This runs if the email is malicious
+                            message = None
+                            result_gif = "hacker.gif"
+                        else:
+                            # A DNS answer outside Spamhaus's DBL codes is not a listing.
+                            message = f"Valid Email Alert! {email}"
+                            result_gif = "success.gif"
                         
                    # This runs if the email is not on the dbl block list
                    except dns.resolver.NXDOMAIN:
