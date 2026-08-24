@@ -17,41 +17,13 @@
         <h1>IsYourEmailAddressValid.COM</h1>
     </header>
 
-    <button id="soundToggle" type="button" style="position:fixed; top:20px; right:20px; z-index:9999; padding:8px 14px; border-radius:20px; border:none; background:#222; color:white; cursor:pointer;">
-        Sound Off
-    </button>
-
-    <script>
-        let soundEnabled = false;
-
-        window.addEventListener("DOMContentLoaded", () => {
-            if (sessionStorage.getItem("soundEnabled") === "true") {
-                soundEnabled = true;
-                document.getElementById("soundToggle").textContent = "🔊 Sound On";
-            }
-        });
-
-        document.getElementById("soundToggle").addEventListener("click", function() {
-            soundEnabled = !soundEnabled;
-            sessionStorage.setItem("soundEnabled", soundEnabled);
-            this.textContent = soundEnabled ? "Sound On" : "Sound Off";
-
-            const unlock = new Audio();
-            unlock.play().catch(() => {});
-        });
-    </script>
-
     <!-- Page Wrapper Div: This holds the main input field and text, aswell as the gifs for success case -->
     <div class="page-wrapper">
 
-    <!-- Cat dancing on left side of text field in success case-->
-    {% if result_gif == "success.gif" %}
-        <img class="side-gif-success" src="{{ url_for('static', filename=result_gif) }}" alt="Result animation">
-    {% endif %}
 
     <!-- Main form container -->
      <div class="main-content">
-        <form action="/regex.py" method="POST" class="email-form">
+        <form id="emailForm" class="email-form">
             <label for="email">Input Your Email Address 😡: </label>
             
             <!-- Changed type to email for built-in browser validation -->
@@ -60,93 +32,76 @@
             <input type="submit" value="Submit">
         </form>
 
-        <!-- Display message for each case, always displayed under the textfield-->
-        {% if message %}
-            <p>{{ message }}</p>
-        {% endif %}
+        <div id="resultArea"></div>
 
         </div>
 
-        <!-- Right handside cat dancing in success case-->
-        {% if result_gif == "success.gif" %}
-            <img class="side-gif-success" src="{{ url_for('static', filename=result_gif) }}" alt="Result animation">
-        {% endif %}
-
-    <!-- Specifically if the success case occurs-->
-    {% if result_gif == "success.gif" %}
-        <script>
-
-            // Confetti Loader for Success Case
-            window.onload = function() {
-                confetti({
-                    particleCount: 150,
-                    spread: 70,
-                    origin: { y: 0.6 }
-                });
-                // Play Yippie mp3 file in success case
-                const sound = new Audio("{{ url_for('static', filename='yipeee.mp3') }}");
-                sound.play();
-            };
-        </script>
-    {% endif %}
-
-    <!-- Specifically if the failure case occurs-->
-    {% if result_gif == "failed.png" %}
-        <div class="wasted-overlay" id="wastedOverlay">
-            <img src="{{ url_for('static', filename=result_gif) }}" alt="Result animation">
         </div>
-
-        <script>
-
-            // Plays 'WastedOverlay' on failed case occuring
-            setTimeout(function() {
-                document.getElementById("wastedOverlay").remove();
-            }, 4000);
-
-            // Plays failed.mp3 file in failed case, inline with the overlay
-            const sound = new Audio("{{ url_for('static', filename='failed.mp3') }}");
-            sound.play();
-        </script>
-
-    {% endif %}
-
-    </div>
-
-    <!-- Specifically if the hacker case occurs-->
-   {% if result_gif == "hacker.gif" %}
-   <!-- Red flashes to incite fear -->
-    <div id="flashOverlay"></div>
-
-    <!-- Fake progress bar for aura-->
-    <div class="progress-container">
-        <div class="fake-progress-bar"></div>
-    </div>
-    <p id="threatText" style="color:#ff3333; font-family: monospace;">INITIALIZING TRACE...</p>
 
     <script>
-        // Messages to load during sequence
+        document.getElementById("emailForm").addEventListener("submit", async function(e) {
+            e.preventDefault();
+
+            const formData = new FormData(this);
+            const response = await fetch("/check-email", {
+                method: "POST",
+                body: formData
+            });
+            const data = await response.json();
+
+            document.getElementById("resultArea").innerHTML = "";
+            showResult(data.message, data.result_gif);
+        });
+
+        function showResult(message, result_gif) {
+            const area = document.getElementById("resultArea");
+            area.innerHTML = `<p>${message}</p>`;
+
+            if (result_gif === "success.gif") {
+                confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+                new Audio("/static/yipeee.mp3").play().catch(() => {});
+            }
+
+            if (result_gif === "failed.png") {
+                area.innerHTML += `<div class="wasted-overlay" id="wastedOverlay"><img src="/static/${result_gif}" alt="Result animation"></div>`;
+                setTimeout(() => document.getElementById("wastedOverlay")?.remove(), 4000);
+                new Audio("/static/failed.mp3").play().catch(() => {});
+            }
+
+            if (result_gif === "hacker.gif") {
+                area.innerHTML += `
+                    <div id="flashOverlay"></div>
+                    <div class="progress-container"><div class="fake-progress-bar"></div></div>
+                    <p id="threatText" style="color:#ff3333; font-family: monospace;">INITIALIZING TRACE...</p>
+                    <div id="fullscreenGif" style="display:none;"><img id="explosionImg" alt="hacker detected"></div>
+                `;
+                startThreatSequence();
+
+                setTimeout(function() {
+                    const fullscreenGif = document.getElementById("fullscreenGif");
+                    fullscreenGif.style.display = "flex";
+                    document.getElementById("explosionImg").src = "/static/explosion.gif";
+                    setTimeout(() => fullscreenGif.remove(), 6500);
+                }, 4000);
+            }
+        }
+
         const messages = [
-            "INITIALIZING TRACE...",
-            "LOCATING SOURCE IP...",
-            "BREACHING FIREWALL...",
-            "IDENTITY CONFIRMED.",
-            "NOTIFYING AUTHORITIES..."
+            "INITIALIZING TRACE...", "LOCATING SOURCE IP...", "BREACHING FIREWALL...",
+            "IDENTITY CONFIRMED.", "NOTIFYING AUTHORITIES..."
         ];
 
-        // Loop which cycles message
-        let i = 0;
-        const el = document.getElementById("threatText");
-        // Loads for both mp3 files, alarm beep and boom respectively
-        const beep = new Audio("{{ url_for('static', filename='beep.mp3') }}");
-        const boom = new Audio("{{ url_for('static', filename='boom.mp3') }}");
-
-        // Little mini function which plays certain audio which is called
         function playCue(audio) {
             audio.currentTime = 0;
             return audio.play();
         }
 
         function startThreatSequence() {
+            let i = 0;
+            const el = document.getElementById("threatText");
+            const beep = new Audio("/static/beep.mp3");
+            const boom = new Audio("/static/boom.mp3");
+
             const interval = setInterval(() => {
                 i++;
                 if (i < messages.length) {
@@ -165,32 +120,7 @@
                 playCue(boom).catch(() => {});
             }, 4000);
         }
-
-        startThreatSequence();
     </script>
-
-    <!-- Div call for the explosion gif after progress load-->
-    <div id="fullscreenGif" style="display:none;">
-        <img data-src="{{ url_for('static', filename='explosion.gif') }}" alt="hacker detected">
-    </div>
-
-    <script>
-
-        // timeout function which times explosion after progress bar
-        setTimeout(function() {
-            const fullscreenGif = document.getElementById("fullscreenGif");
-            fullscreenGif.style.display = "flex";
-            fullscreenGif.querySelector("img").src = fullscreenGif.querySelector("img").dataset.src;
-
-            // Removes explosion once after completion
-            setTimeout(function() {
-                fullscreenGif.remove();
-                }, 6500);
-
-        }, 4000);
-
-    </script>
-    {% endif %}
 
 </body>
 
