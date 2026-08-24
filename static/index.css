@@ -1,15 +1,19 @@
+/* index.css: contains all css used in project, created by Adam Dimkovski [24/08/2026]
+/* Hardcoded colors and radius to reuse*/
 :root {
     --brand-red: #ff0505;
     --white: #ffffff;
     --radius: 8px;
 }
 
+/* Universal Reset between webpage loads */
 *,
 *::before,
 *::after {
     box-sizing: border-box;
 }
 
+/* Body Css */
 body {
     display: flex;
     flex-direction: column;
@@ -22,6 +26,7 @@ body {
     font-family: sans-serif;
 }
 
+/* Header Css */
 .header {
     width: 100%;
     max-width: 800px;
@@ -30,6 +35,7 @@ body {
     text-align: center;
 }
 
+/* H1 Css; used for title on page */
 h1 {
     margin: 0;
     padding-top: 1.25rem;
@@ -37,6 +43,12 @@ h1 {
     text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
     animation: swingHead 3s ease-in-out infinite;
 }
+
+/* Text field Css; email form, email form label, .email-form input[type="email"],
+.email-form input[type="email"]:focus, .email-form input[type="submit"],
+.email-form input[type="submit"]:hover, .email-form input[type="submit"]:active */
+
+/* Email textfield Block */
 
 .email-form {
     display: flex;
@@ -89,6 +101,9 @@ h1 {
     transform: scale(0.98);
 }
 
+/* Email textfield Block */
+
+/* PageWrapper: Css which is used for the midsection including; textfield, and text above/below and to the sides of textfield */ 
 .page-wrapper {
     display: flex;
     align-items: center;
@@ -108,11 +123,6 @@ h1 {
     animation: catSwing 3s ease-in-out infinite;
 }
 
-.side-gif-hacker {
-    width: 150px;
-    height: auto;
-}
-
 p {
     font-size: 1.5rem;
     font-weight: 700;
@@ -124,6 +134,10 @@ p {
     text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4);
     animation: popIn 0.4s ease-out;
 }
+
+/* End of Midsection CSS */
+
+/* Wasted Overlay/text used for fail case */
 
 .wasted-overlay {
     position: fixed;
@@ -147,6 +161,7 @@ p {
     animation: popIn 0.4s ease-out;
 }
 
+/* Progress bar and explosion effects used for hacker case */
 .progress-container {
   margin-top: 15px;
   width: 100%;
@@ -194,11 +209,15 @@ p {
   animation: explodeIn 0.5s ease-out forwards;
 }
 
+/* Keyframes */
+
+/* fadeIn: Used for #fullscreenGif */
 @keyframes fadeIn {
   from { opacity: 0; }
   to   { opacity: 1; }
 }
 
+/* screenFlash: Used for #flashOverlay */
 @keyframes screenFlash {
   0%   { opacity: 0.85; }
   20%  { opacity: 0.1; }
@@ -207,6 +226,7 @@ p {
   100% { opacity: 0; }
 }
 
+/* popIn: Used for p text and .wasted-text */
 @keyframes popIn {
     0% {
         opacity: 0;
@@ -218,6 +238,7 @@ p {
     }
 }
 
+/* swingHead: applies to h1 (title) */
 @keyframes swingHead {
     0%, 100% {
         transform: translateX(-20rem) translateY(-10rem) rotate(-10deg);
@@ -227,6 +248,7 @@ p {
     }
 }
 
+/* fadeOutText: applies to .wasted_overlay */
 @keyframes fadeOutText {
     0% {
         opacity: 0;
@@ -242,6 +264,7 @@ p {
     }
 }
 
+/* catSwing: applies to .side-gif-success */
 @keyframes catSwing {
     0%, 100% {
         transform: rotate(-35deg);
@@ -251,6 +274,7 @@ p {
     }
 }
 
+/* fakeLoad: applies to .fake-progress-bar */
 @keyframes fakeLoad {
   0%   { width: 0%; }
   20%  { width: 15%; }
@@ -262,6 +286,7 @@ p {
   100% { width: 100%; }
 }
 
+/* explodeIn: applies to #fullscreenGif img */
 @keyframes explodeIn {
   0%   { transform: scale(0); opacity: 1; }
   60%  { transform: scale(1.3); opacity: 1; }  

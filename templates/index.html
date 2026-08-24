@@ -1,6 +1,8 @@
+<!-- Index.html created by Adam Dimkovski, [24/08/2026] -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Head infomation, includes encoding type, metadata, title, css link and confettit loading-->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IsYourEmailAddressValid.Com</title>
@@ -15,8 +17,10 @@
         <h1>IsYourEmailAddressValid.COM</h1>
     </header>
 
+    <!-- Page Wrapper Div: This holds the main input field and text, aswell as the gifs for success case -->
     <div class="page-wrapper">
 
+    <!-- Cat dancing on left side of text field in success case-->
     {% if result_gif == "success.gif" %}
         <img class="side-gif-success" src="{{ url_for('static', filename=result_gif) }}" alt="Result animation">
     {% endif %}
@@ -32,12 +36,14 @@
             <input type="submit" value="Submit">
         </form>
 
+        <!-- Display message for each case, always displayed under the textfield-->
         {% if message %}
             <p>{{ message }}</p>
         {% endif %}
 
         </div>
 
+        <!-- Right handside cat dancing in success case-->
         {% if result_gif == "success.gif" %}
             <img class="side-gif-success" src="{{ url_for('static', filename=result_gif) }}" alt="Result animation">
         {% endif %}
@@ -45,12 +51,15 @@
     <!-- Specifically if the success case occurs-->
     {% if result_gif == "success.gif" %}
         <script>
+
+            // Confetti Loader for Success Case
             window.onload = function() {
                 confetti({
                     particleCount: 150,
                     spread: 70,
                     origin: { y: 0.6 }
                 });
+                // Play Yippie mp3 file in success case
                 const sound = new Audio("{{ url_for('static', filename='yipeee.mp3') }}");
                 sound.play();
             };
@@ -64,24 +73,34 @@
         </div>
 
         <script>
+
+            // Plays 'WastedOverlay' on failed case occuring
             setTimeout(function() {
                 document.getElementById("wastedOverlay").remove();
             }, 4000);
+
+            // Plays failed.mp3 file in failed case, inline with the overlay
+            const sound = new Audio("{{ url_for('static', filename='failed.mp3') }}");
+            sound.play();
         </script>
 
     {% endif %}
 
     </div>
 
+    <!-- Specifically if the hacker case occurs-->
    {% if result_gif == "hacker.gif" %}
+   <!-- Red flashes to incite fear -->
     <div id="flashOverlay"></div>
 
+    <!-- Fake progress bar for aura-->
     <div class="progress-container">
         <div class="fake-progress-bar"></div>
     </div>
     <p id="threatText" style="color:#ff3333; font-family: monospace;">INITIALIZING TRACE...</p>
 
     <script>
+        // Messages to load during sequence
         const messages = [
             "INITIALIZING TRACE...",
             "LOCATING SOURCE IP...",
@@ -89,30 +108,63 @@
             "IDENTITY CONFIRMED.",
             "NOTIFYING AUTHORITIES..."
         ];
+
+        // Loop which cycles message
         let i = 0;
         const el = document.getElementById("threatText");
+        // Loads for both mp3 files, alarm beep and boom respectively
+        const beep = new Audio("{{ url_for('static', filename='beep.mp3') }}");
+        const boom = new Audio("{{ url_for('static', filename='boom.mp3') }}");
+
+        // Little mini function which plays certain audio which is called 
+        function playCue(audio) {
+            audio.currentTime = 0;
+            audio.play().catch(() => {
+                
+            });
+        }
+
+        // Function call to play beep until the progress bar finishes
+        playCue(beep);
         const interval = setInterval(() => {
             i++;
-            if (i < messages.length) el.textContent = messages[i];
-            else clearInterval(interval);
+            if (i < messages.length) {
+                el.textContent = messages[i];
+                playCue(beep);
+            } else {
+                clearInterval(interval);
+            }
         }, 800);
+
+        // Reset timeout which plays boom when progress bar loading finishes
+        setTimeout(() => {
+            clearInterval(interval);
+            beep.pause();
+            beep.currentTime = 0;
+            playCue(boom);
+        }, 4000);
     </script>
 
+    <!-- Div call for the explosion gif after progress load-->
     <div id="fullscreenGif" style="display:none;">
         <img data-src="{{ url_for('static', filename='explosion.gif') }}" alt="hacker detected">
     </div>
 
     <script>
+
+        // timeout function which times explosion after progress bar
         setTimeout(function() {
             const fullscreenGif = document.getElementById("fullscreenGif");
             fullscreenGif.style.display = "flex";
             fullscreenGif.querySelector("img").src = fullscreenGif.querySelector("img").dataset.src;
 
+            // Removes explosion once after completion
             setTimeout(function() {
                 fullscreenGif.remove();
                 }, 6500);
 
         }, 4000);
+
     </script>
     {% endif %}
 
