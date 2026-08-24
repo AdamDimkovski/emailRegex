@@ -17,6 +17,30 @@
         <h1>IsYourEmailAddressValid.COM</h1>
     </header>
 
+    <button id="soundToggle" type="button" style="position:fixed; top:20px; right:20px; z-index:9999; padding:8px 14px; border-radius:20px; border:none; background:#222; color:white; cursor:pointer;">
+        Sound Off
+    </button>
+
+    <script>
+        let soundEnabled = false;
+
+        window.addEventListener("DOMContentLoaded", () => {
+            if (sessionStorage.getItem("soundEnabled") === "true") {
+                soundEnabled = true;
+                document.getElementById("soundToggle").textContent = "🔊 Sound On";
+            }
+        });
+
+        document.getElementById("soundToggle").addEventListener("click", function() {
+            soundEnabled = !soundEnabled;
+            sessionStorage.setItem("soundEnabled", soundEnabled);
+            this.textContent = soundEnabled ? "Sound On" : "Sound Off";
+
+            const unlock = new Audio();
+            unlock.play().catch(() => {});
+        });
+    </script>
+
     <!-- Page Wrapper Div: This holds the main input field and text, aswell as the gifs for success case -->
     <div class="page-wrapper">
 
@@ -93,8 +117,6 @@
    <!-- Red flashes to incite fear -->
     <div id="flashOverlay"></div>
 
-    <button id="enableSound" type="button">Enable sound</button>
-
     <!-- Fake progress bar for aura-->
     <div class="progress-container">
         <div class="fake-progress-bar"></div>
@@ -144,12 +166,7 @@
             }, 4000);
         }
 
-        // Browsers may block automatic audio after a form submission.
         startThreatSequence();
-        document.getElementById("enableSound").addEventListener("click", () => {
-            startThreatSequence();
-            document.getElementById("enableSound").remove();
-        });
     </script>
 
     <!-- Div call for the explosion gif after progress load-->
@@ -174,7 +191,6 @@
 
     </script>
     {% endif %}
-
 
 </body>
 
