@@ -3,6 +3,7 @@
 from flask import Flask, render_template, request
 import dns.resolver
 
+import os
 import re
 
 app = Flask(__name__)
@@ -39,7 +40,8 @@ def regex():
 
                    # If email format is valid, check to see if its on a blocklist
                    domain_to_check = email.partition('@')[2]
-                   dbl_zone = "dbl.spamhaus.org"
+                   dqs_key = os.environ.get("SPAMHAUS_KEY")
+                   dbl_zone = f"{dqs_key}.dbl.dq.spamhaus.net"
                    query_target = f"{domain_to_check}.{dbl_zone}"
                    
                    try:
