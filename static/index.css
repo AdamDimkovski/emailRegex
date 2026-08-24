@@ -170,6 +170,7 @@ p {
 }
 
 /* Progress bar and explosion effects used for hacker case */
+
 .progress-container {
   margin: 15px auto 0 auto;
   width: 100%;
@@ -215,6 +216,20 @@ p {
   height: auto;
   object-fit: contain;   
   animation: explodeIn 0.5s ease-out forwards;
+}
+
+#eliminatedText {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 3rem;
+  font-weight: 900;
+  font-family: monospace;
+  color: #ff0505;
+  text-shadow: 3px 3px 0 black;
+  z-index: 10001;
+  animation: popIn 0.4s ease-out;
 }
 
 /* Keyframes */

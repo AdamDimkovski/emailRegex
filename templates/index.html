@@ -83,6 +83,7 @@
                     <div class="progress-container"><div class="fake-progress-bar"></div></div>
                     <p id="threatText" style="color:#ff3333; font-family: monospace;">INITIALIZING TRACE...</p>
                     <div id="fullscreenGif" style="display:none;"><img id="explosionImg" alt="hacker detected"></div>
+                    <div id="eliminatedText" style="display:none;">HACKERS ELIMINATED</div>
                 `;
                 startThreatSequence();
 
@@ -90,17 +91,24 @@
                     const fullscreenGif = document.getElementById("fullscreenGif");
                     fullscreenGif.style.display = "flex";
                     document.getElementById("explosionImg").src = "/static/explosion.gif";
-                    setTimeout(() => fullscreenGif.remove(), 6500);
+
+                    setTimeout(() => {
+                        fullscreenGif.remove();
+                        const eliminated = document.getElementById("eliminatedText");
+                        eliminated.style.display = "block";
+
+                        setTimeout(() => eliminated.remove(), 1000);
+                    }, 6500);
                 }, 4000);
             }
-        }
+        
 
         // List of messages during hacker sequence
         const messages = [
             "INITIALIZING TRACE...", "LOCATING SOURCE IP...", "BREACHING FIREWALL...",
             "IDENTITY CONFIRMED.", "NOTIFYING AUTHORITIES..."
         ];
-        
+
         function playCue(audio) {
             audio.currentTime = 0;
             return audio.play();
